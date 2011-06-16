@@ -164,6 +164,7 @@ public class IOStreamChannelSink extends AbstractChannelSink {
 
 				final ChannelBuffer buffer = (ChannelBuffer) event.getMessage();
 				buffer.readBytes(outputStream, buffer.readableBytes());
+				outputStream.flush();
 				e.getFuture().setSuccess();
 
 			} else {
