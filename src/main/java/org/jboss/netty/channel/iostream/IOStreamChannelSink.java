@@ -134,7 +134,7 @@ public class IOStreamChannelSink extends AbstractChannelSink {
 					if (Boolean.FALSE.equals(value)) {
 						outputStream = null;
 						inputStream = null;
-						channel.getCloseFuture().setSuccess();
+						future.setSuccess();
 					}
 					break;
 
@@ -165,7 +165,7 @@ public class IOStreamChannelSink extends AbstractChannelSink {
 				final ChannelBuffer buffer = (ChannelBuffer) event.getMessage();
 				buffer.readBytes(outputStream, buffer.readableBytes());
 				outputStream.flush();
-				e.getFuture().setSuccess();
+				future.setSuccess();
 
 			} else {
 				throw new IllegalArgumentException(
