@@ -7,7 +7,7 @@
 	<artifactId>netty-iostream</artifactId>
 	<name>Netty IOStream Support</name>
 	<packaging>jar</packaging>
-	<version>0.2</version>
+	<version>0.3-SNAPSHOT</version>
 
 	<dependencies>
 		<dependency>
