@@ -134,7 +134,7 @@ public class IOStreamChannelSink extends AbstractChannelSink {
 					if (Boolean.FALSE.equals(value)) {
 						outputStream = null;
 						inputStream = null;
-						future.setSuccess();
+						((IOStreamChannel) e.getChannel()).doSetClosed();
 					}
 					break;
 
