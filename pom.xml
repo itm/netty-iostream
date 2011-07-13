@@ -37,12 +37,12 @@
 		<repository>
 			<id>itm-maven-repository-releases</id>
 			<name>ITM UzL Maven releases repository</name>
-			<url>scp://itm01.itm.uni-luebeck.de/www/itm/projects/maven/releases</url>
+			<url>scpexe://itm01.itm.uni-luebeck.de/www/itm/projects/maven/releases</url>
 		</repository>
 		<snapshotRepository>
 			<id>itm-maven-repository-snapshots</id>
 			<name>ITM UzL Maven snapshots repository</name>
-			<url>scp://itm01.itm.uni-luebeck.de/www/itm/projects/maven/snapshots</url>
+			<url>scpexe://itm01.itm.uni-luebeck.de/www/itm/projects/maven/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
 
@@ -100,6 +100,13 @@
 				</executions>
 			</plugin>
 		</plugins>
+		<extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ssh-external</artifactId>
+                <version>1.0</version>
+            </extension>
+        </extensions>
 	</build>
 
 	<properties>
@@ -107,7 +114,7 @@
 	</properties>
 
 	<scm>
-		<connection>scm:git:https://itm@github.com/itm/netty-iostream.git</connection>
+		<connection>scm:git:git@github.com:itm/netty-iostream.git</connection>
 	</scm>
 
 </project>
