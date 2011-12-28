@@ -24,6 +24,7 @@ import java.io.PushbackInputStream;
 import java.util.concurrent.ExecutorService;
 
 import static org.jboss.netty.channel.Channels.*;
+import static org.jboss.netty.channel.Channels.fireChannelDisconnected;
 
 /**
  * A {@link org.jboss.netty.channel.ChannelSink} implementation which reads from an {@link java.io.InputStream} and
@@ -60,6 +61,7 @@ public class IOStreamChannelSink extends AbstractChannelSink {
 						// peek into the stream if it was closed (value=-1)
 						int b = in.read();
 						if (b < 0) {
+							channelSink.disconnectChannelInternal(null);
 							break;
 						}
 						// push back the byte which was read too much
@@ -116,6 +118,19 @@ public class IOStreamChannelSink extends AbstractChannelSink {
 	private PushbackInputStream inputStream;
 
 	private ChannelConfig config = new DefaultChannelConfig();
+	
+	private void disconnectChannelInternal(ChannelFuture future) {
+
+		inputStream = null;
+		outputStream = null;
+		remoteAddress = null;
+
+		channel.doSetClosed();
+		fireChannelDisconnected(channel);
+		if (future != null) {
+			future.setSuccess();
+		}
+	}
 
 	@Override
 	public void eventSunk(final ChannelPipeline pipeline, final ChannelEvent e) throws Exception {
@@ -132,9 +147,7 @@ public class IOStreamChannelSink extends AbstractChannelSink {
 
 				case OPEN:
 					if (Boolean.FALSE.equals(value)) {
-						outputStream = null;
-						inputStream = null;
-						((IOStreamChannel) e.getChannel()).doSetClosed();
+						disconnectChannelInternal(future);
 					}
 					break;
 
@@ -148,6 +161,7 @@ public class IOStreamChannelSink extends AbstractChannelSink {
 						inputStream = new PushbackInputStream(remoteAddress.getInputStream());
 						executorService.execute(new ReadRunnable(this));
 						future.setSuccess();
+						Channels.fireChannelConnected(pipeline.getChannel(), remoteAddress);
 					}
 					break;
 
