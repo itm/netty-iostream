@@ -159,9 +159,9 @@ public class IOStreamChannelSink extends AbstractChannelSink {
 						remoteAddress = (IOStreamAddress) value;
 						outputStream = remoteAddress.getOutputStream();
 						inputStream = new PushbackInputStream(remoteAddress.getInputStream());
-						executorService.execute(new ReadRunnable(this));
-						future.setSuccess();
 						Channels.fireChannelConnected(pipeline.getChannel(), remoteAddress);
+						future.setSuccess();
+						executorService.execute(new ReadRunnable(this));
 					}
 					break;
 
